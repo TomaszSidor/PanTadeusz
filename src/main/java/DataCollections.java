@@ -61,13 +61,13 @@ public class DataCollections {
 
         //2) Wszystkie nazwiska zaczynające się na literę 'B'
         List<String> list2 = DataCollections.getSurnames().stream()
-                .filter(nazwisko ->nazwisko.startsWith("B"))
+                .filter(nazwisko -> nazwisko.startsWith("B"))
                 .collect(toList());
         //System.out.println(list2);
 
         //3) Początkowe trzy litery wszystkich nazwisk, bez powtórzeń, z małych liter
         List<String> list3 = DataCollections.getSurnames().stream()
-                .map(s -> s.toLowerCase().substring(0,3))
+                .map(s -> s.toLowerCase().substring(0, 3))
                 .collect(Collectors.toList());
         //System.out.println(list3);
 
@@ -78,74 +78,93 @@ public class DataCollections {
                 .collect(Collectors.toList());
         //System.out.println(list4);
 
-       //6) Odwróć kolejność liter we wszystkich nazwiskach i pozstaw jedynie te,
+//      5) 20 najkrótszych nazwisk, posortowanych według ostatniej litery
+        List<String> list5 = DataCollections.getSurnames().stream()
+                .sorted(Comparator.comparingInt(String::length))
+                .limit(20)
+                .map(nazwisko -> new StringBuilder(nazwisko).reverse().toString())
+                .sorted(String::compareTo)
+                .map(nazwisko -> new StringBuilder(nazwisko).reverse().toString())
+                .collect(Collectors.toList());
+
+        System.out.println(list5); // nie wierzę ale chyba działą !!!!!
+
+
+        //6) Odwróć kolejność liter we wszystkich nazwiskach i pozstaw jedynie te,
         // które mają literę 'A' wsród pierwszych trzech liter (odwróconego nazwiska)
-//        List<String> list6;
-//        list6 = DataCollections.getSurnames().stream()
-//                .map(nazwisko -> {
-//                    StringBuilder sb = new StringBuilder(nazwisko).reverse().toString(); //robimy StringBuildera zeby dostac sie do metody reverse
-//
-//                }
-//                .collect(Collectors.toList());
-//        System.out.println(list6);
+        List<String> list6 = DataCollections.getSurnames().stream()
+                .map(nazwisko -> new StringBuilder(nazwisko).reverse().toString())   //robimy StringBuildera zeby dostac sie do metody reverse
+                .filter(nazwisko -> {
+                    String trzyLiterki = nazwisko.substring(0, 3).toLowerCase();
+                    return trzyLiterki.contains("a") || trzyLiterki.contains("b");
+                })
+                .collect(Collectors.toList());
+        // System.out.println(list6);
+
+//        7) Policz, ile jest nazwisk zaczynających się na każdą z liter alfabetu (rezultat jako Map<Character, Integer>)
+        Map<Character, Integer> result = new TreeMap<>();
+//        List<String> list7 = DataCollections.getSurnames().stream()
+//                .filter(nazwisko -> {
+//                    char[] litera = nazwisko.substring(0,0).toCharArray();
+//                    return litera;
+//                        });
+
+        System.out.println();
 
 
 
-    //Liczby:
-    //1) Ile jest liczb parzystych?
+
+        //Liczby:
+        //1) Ile jest liczb parzystych?
 
         long ileParzystych = DataCollections.getNumbers(100_000).stream()
-            .filter(liczba -> liczba%2 == 0)
-            .count();
-        System.out.println(ileParzystych);
-
-    //2) Ile jest liczb pięciocyfrowych?
-        long ilePieciocyfrowychg = DataCollections.getNumbers(100_000).stream()
-                .filter(liczba -> liczba >=10_000 && liczba < 100_000)
+                .filter(liczba -> liczba % 2 == 0)
                 .count();
-        System.out.println(ilePieciocyfrowychg);
+//        System.out.println(ileParzystych);
 
-    //3) Jaka jest największa i najmniejsza liczba?
+        //2) Ile jest liczb pięciocyfrowych?
+        long ilePieciocyfrowychg = DataCollections.getNumbers(100_000).stream()
+                .filter(liczba -> liczba >= 10_000 && liczba < 100_000)
+                .count();
+//        System.out.println(ilePieciocyfrowychg);
+
+        //3) Jaka jest największa i najmniejsza liczba?
         Optional najwieksza = DataCollections.getNumbers(100_000).stream()
                 .max(Integer::compareTo);
-        System.out.println(najwieksza.get());
-    //4) Jaka jest różnica między największa a najmniejszą liczbą?
+//        System.out.println(najwieksza.get());
+        //4) Jaka jest różnica między największa a najmniejszą liczbą?
         Integer najmniejsza = DataCollections.getNumbers(100_000).stream()
                 .min(Integer::compareTo).get();
         Integer najwieksza2 = DataCollections.getNumbers(100_000).stream()
                 .max(Integer::compareTo)
                 .get();
-                ;
-        System.out.println("Najwieksza " + najwieksza);
-        System.out.println("Najmniejssza " + najmniejsza);
-
-                System.out.print("Różnica max min: ");
-        System.out.println(najwieksza2 - najmniejsza);
+//        System.out.print("Różnica max min: ");
+//        System.out.println(najwieksza2 - najmniejsza);
 
 
-    //5) Jaka jest średnia wszystkich liczb?
+        //5) Jaka jest średnia wszystkich liczb?
         Double averenge = DataCollections.getNumbers(100_000).stream()
                 .mapToDouble(Integer::doubleValue).average().getAsDouble();
-        System.out.println("Srednia " + averenge);
-    //6*) Jaka jest mediana wszystkich liczb?
-        DoubleStream mediana = DataCollections.getNumbers(100_000).stream()
-                .sorted(Integer::compareTo)
-                .filter(n -> n.)
-                ;
-        System.out.println((mediana.iterator()));
+//        System.out.println("Srednia " + averenge);
+        //6*) Jaka jest mediana wszystkich liczb?
+//        DoubleStream mediana = DataCollections.getNumbers(100_000).stream()
+//                .sorted(Integer::compareTo)
+//                .filter(n -> n.)
+//                ;
+//        System.out.println((mediana.iterator()));
 
 
-
-    //7*) Jaka cyfra pojawia się najczęściej we wszystkcih liczbach?
+        //7*) Jaka cyfra pojawia się najczęściej we wszystkcih liczbach?
 
 //        Map<Character, Integer> najczesciejWystepuje = DataCollections.getNumbers(100_000).stream()
 //                .iterator()
 //                .toString()
 //                .toCharArray()
 //                .
-    //8*) Ile jest wystąpień każdej cyfry (rezultat jako Map<Integer, Integer> z kluczami od 0 do 9)
-    //9) Wypisz wszystkie liczby pierwsze, posortowane rosnąco
-}}
+        //8*) Ile jest wystąpień każdej cyfry (rezultat jako Map<Integer, Integer> z kluczami od 0 do 9)
+        //9) Wypisz wszystkie liczby pierwsze, posortowane rosnąco
+    }
+}
 
 
 
